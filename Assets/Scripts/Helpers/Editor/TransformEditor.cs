@@ -52,13 +52,12 @@ namespace Helpers
 
         private void GlobalPropertiesUI()
         {
-            EditorGUILayout.Space(10);
             EditorGUILayout.BeginVertical("box");
          
             EditorGUI.BeginChangeCheck();
             
-            var globalPos = EditorGUILayout.Vector3Field("Global Position", _transform.position);
-            var globalEuler = EditorGUILayout.Vector3Field("Global Euler Angles", _transform.eulerAngles);
+            var globalPos = EditorGUILayout.Vector3Field(new GUIContent("Position"), _transform.position);
+            var globalEuler = EditorGUILayout.Vector3Field("EulerAngles", _transform.eulerAngles);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -75,8 +74,8 @@ namespace Helpers
         private void LocalPropertiesUI()
         {
             EditorGUI.BeginChangeCheck();
-            var localPos = EditorGUILayout.Vector3Field("Local Position", _transform.localPosition);
-            var localEuler = EditorGUILayout.Vector3Field("Local Euler Angles", _transform.localEulerAngles);
+            var localPos = EditorGUILayout.Vector3Field("Local Pos", _transform.localPosition);
+            var localEuler = EditorGUILayout.Vector3Field("Local Euler", _transform.localEulerAngles);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -85,7 +84,8 @@ namespace Helpers
                 _transform.localPosition = localPos;
                 _transform.localEulerAngles = localEuler;
             }
-                
+            
+            EditorGUILayout.Space(10);
             GlobalPropertiesUI();
         }
 
