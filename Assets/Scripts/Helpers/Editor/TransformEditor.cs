@@ -1,6 +1,8 @@
 using System;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Helpers
 {
@@ -22,6 +24,8 @@ namespace Helpers
 
         private void BaseUI()
         {
+            EditorGUI.BeginChangeCheck();
+            
             var parent = _transform.parent;
             var isLocal = parent != null;
             EditorGUILayout.BeginVertical("box");
@@ -42,6 +46,11 @@ namespace Helpers
             _transform.localScale = EditorGUILayout.Vector3Field("Scale", _transform.localScale);
             
             EditorGUILayout.EndVertical();
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            }
         }
 
         private void GlobalPropertiesUI()
