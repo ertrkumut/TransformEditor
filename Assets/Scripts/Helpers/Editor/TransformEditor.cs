@@ -32,24 +32,55 @@ namespace Helpers
             
             if(!isLocal)
             {
-                _transform.position = EditorGUILayout.Vector3Field("Position", _transform.position);
-                _transform.eulerAngles = EditorGUILayout.Vector3Field("Euler Angles", _transform.eulerAngles);
+                EditorGUI.BeginChangeCheck();
+                var globalPos = EditorGUILayout.Vector3Field("Position", _transform.position);
+                var globalEuler = EditorGUILayout.Vector3Field("Euler Angles", _transform.eulerAngles);
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(target, "Global Properties");
+                    _transform.position = globalPos;
+                    _transform.eulerAngles = globalEuler;
+                }
             }
             else
             {
-                _transform.localPosition = EditorGUILayout.Vector3Field("Local Position", _transform.localPosition);
-                _transform.localEulerAngles = EditorGUILayout.Vector3Field("Local Euler Angles", _transform.localEulerAngles);
+                EditorGUI.BeginChangeCheck();
+                var localPos = EditorGUILayout.Vector3Field("Local Position", _transform.localPosition);
+                var localEuler = EditorGUILayout.Vector3Field("Local Euler Angles", _transform.localEulerAngles);
 
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(target, "Local Properties");
+
+                    _transform.localPosition = localPos;
+                    _transform.localEulerAngles = localEuler;
+                }
+                
                 GlobalPropertiesUI();
             }
 
-            _transform.localScale = EditorGUILayout.Vector3Field("Scale", _transform.localScale);
+            ScaleUI();
             
+
             EditorGUILayout.EndVertical();
 
             if (EditorGUI.EndChangeCheck())
             {
                 EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            }
+        }
+
+        private void ScaleUI()
+        {
+            EditorGUI.BeginChangeCheck();
+            var localScale = EditorGUILayout.Vector3Field("Scale", _transform.localScale);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(target, "Local Scale");
+
+                _transform.localScale = localScale;
             }
         }
 
