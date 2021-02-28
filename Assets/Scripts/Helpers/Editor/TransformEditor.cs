@@ -32,32 +32,11 @@ namespace Helpers
             
             if(!isLocal)
             {
-                EditorGUI.BeginChangeCheck();
-                var globalPos = EditorGUILayout.Vector3Field("Position", _transform.position);
-                var globalEuler = EditorGUILayout.Vector3Field("Euler Angles", _transform.eulerAngles);
-
-                if (EditorGUI.EndChangeCheck())
-                {
-                    Undo.RecordObject(target, "Global Properties");
-                    _transform.position = globalPos;
-                    _transform.eulerAngles = globalEuler;
-                }
+                GlobalPropertiesUI();
             }
             else
             {
-                EditorGUI.BeginChangeCheck();
-                var localPos = EditorGUILayout.Vector3Field("Local Position", _transform.localPosition);
-                var localEuler = EditorGUILayout.Vector3Field("Local Euler Angles", _transform.localEulerAngles);
-
-                if (EditorGUI.EndChangeCheck())
-                {
-                    Undo.RecordObject(target, "Local Properties");
-
-                    _transform.localPosition = localPos;
-                    _transform.localEulerAngles = localEuler;
-                }
-                
-                GlobalPropertiesUI();
+                LocalPropertiesUI();
             }
 
             ScaleUI();
@@ -71,6 +50,45 @@ namespace Helpers
             }
         }
 
+        private void GlobalPropertiesUI()
+        {
+            EditorGUILayout.Space(10);
+            EditorGUILayout.BeginVertical("box");
+         
+            EditorGUI.BeginChangeCheck();
+            
+            var globalPos = EditorGUILayout.Vector3Field("Global Position", _transform.position);
+            var globalEuler = EditorGUILayout.Vector3Field("Global Euler Angles", _transform.eulerAngles);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(target, "Global Properties");
+                _transform.position = globalPos;
+                _transform.eulerAngles = globalEuler;
+            }
+            
+            EditorGUILayout.EndVertical();
+            
+            EditorGUILayout.Space(10);
+        }
+        
+        private void LocalPropertiesUI()
+        {
+            EditorGUI.BeginChangeCheck();
+            var localPos = EditorGUILayout.Vector3Field("Local Position", _transform.localPosition);
+            var localEuler = EditorGUILayout.Vector3Field("Local Euler Angles", _transform.localEulerAngles);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(target, "Local Properties");
+
+                _transform.localPosition = localPos;
+                _transform.localEulerAngles = localEuler;
+            }
+                
+            GlobalPropertiesUI();
+        }
+
         private void ScaleUI()
         {
             EditorGUI.BeginChangeCheck();
@@ -82,19 +100,6 @@ namespace Helpers
 
                 _transform.localScale = localScale;
             }
-        }
-
-        private void GlobalPropertiesUI()
-        {
-            EditorGUILayout.Space(10);
-            EditorGUILayout.BeginVertical("box");
-            
-            _transform.position = EditorGUILayout.Vector3Field("Global Position", _transform.position);
-            _transform.eulerAngles = EditorGUILayout.Vector3Field("Global Euler Angles", _transform.eulerAngles);
-            
-            EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.Space(10);
         }
     }
 }
